@@ -12,7 +12,6 @@ function ImgStorage(image_url, title, description, keyword, horns) {
     this.horns = horns;
 
     ImgStorage.allimageStorage.push(this);
-
   }
   ImgStorage.allimageStorage = [];
 
@@ -55,24 +54,6 @@ function renderAnimalOptions(dropdownOptions){
       })
     }
 
-///
-ImgStorage.prototype.sortSelection = function() {  // 2 parameters
-    
-    ImgStorage.allimageStorage.sort(function(l, r) {
-      l = l.horns
-      r = r.horns
-  
-      if (l < r) {
-          return 1
-      } else if (l > r) {
-          return -1
-      } else {
-        return 0
-      }
-    })
-  }
-
-
 
 /////////////////////////
 ///// Main Program
@@ -87,19 +68,23 @@ $('#sort-button').on('click', function(){
   $('body > section').empty();
   
   ImgStorage.allimageStorage.sort(function(l, r) {
-    l = l.horns
-    r = r.horns
+  console.log("🚀 ~ file: app.js ~ line 71 ~ ImgStorage.allimageStorage.sort ~ l, r", l, r)
+    
 
-    if (l < r) {
+    if (l.horns > r.horns) {
         return 1
-    } else if (l > r) {
+    } else if (l.horns < r.horns) {
         return -1
-    } else {
-      return 0
+    } else { 
+        if (l.keyword > r.keyword) {
+          return 1
+      } else if (l.keyword < r.keyword) {
+          return -1
+      } else {
+          return 0
+      }
     }
   })
-  console.log("🚀 ~ file: app.js ~ line 90 ~ ImgStorage.allimageStorage.sort ~  ImgStorage.allimageStorage",  ImgStorage.allimageStorage)
-
 
   ImgStorage.allimageStorage.forEach(imgStorage => imgStorage.renderWithJQueryAndMustache());
 });
@@ -125,34 +110,4 @@ $('#sort-button').on('click', function(){
 
 
   })
-
-
-
-
-    
-    // ImgStorage.allimageStorage.forEach(animalPic => animalPic.renderWithJQueryAndMustache());
-  // });
-  
-  // $('button:nth-of-type(2)').on('click', () => {
-  //   $('body > table tr:nth-child(n+2)').empty();
-  //   ImgStorage.allimageStorage2.forEach(animalPic2 => animalPic2.renderWithJQueryAndMustache());
-  
-  // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
