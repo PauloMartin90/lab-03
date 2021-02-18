@@ -12,9 +12,9 @@ function ImgStorage(image_url, title, description, keyword, horns) {
     this.horns = horns;
 
     ImgStorage.allimageStorage.push(this);
+
   }
   ImgStorage.allimageStorage = [];
-  ImgStorage.allimageStorage2 = [];
 
 
 // Rendering Images with Mustache and jQuery
@@ -29,7 +29,6 @@ ImgStorage.prototype.renderWithJQueryAndMustache = function() {
   function objectFile(arrayObject) {    // STAND ALONE FUNCTION
   
     arrayObject.forEach(animalPic => {
-        
     new ImgStorage(animalPic.image_url, animalPic.title, animalPic.description, animalPic.keyword, animalPic.horns);
     
             // Fills the Select Element
@@ -45,6 +44,35 @@ function renderAnimalOptions(dropdownOptions){
     $('select').append('<option>' + dropdownOptions + '</option>');
   }
 
+///
+  function filterSelection(event) {
+  $('body > section').empty();
+
+  ImgStorage.allimageStorage.forEach(animalpic => {
+    if (animalpic.keyword === event.target.value){
+            animalpic.renderWithJQueryAndMustache()
+        }
+      })
+    }
+
+///
+ImgStorage.prototype.sortSelection = function() {  // 2 parameters
+    
+    ImgStorage.allimageStorage.sort(function(l, r) {
+      l = l.horns
+      r = r.horns
+  
+      if (l < r) {
+          return 1
+      } else if (l > r) {
+          return -1
+      } else {
+        return 0
+      }
+    })
+  }
+
+
 
 /////////////////////////
 ///// Main Program
@@ -55,29 +83,61 @@ $.ajax('data/page-1.json').then(objectFile);
 /// Function to click and filter
 $('select').on('change', filterSelection);
 
-
-
-function filterSelection(event) {
- $('body > section').empty();
-
- ImgStorage.allimageStorage.forEach(animalpic => {
-  if (animalpic.keyword === event.target.value){
-          animalpic.renderWithJQueryAndMustache()
-      }
-    })
-  }
-
-
-  $('button:first-of-type').on('click', () => {
-    $('body > table tr:nth-child(n+2)').empty();
-    ImgStorage.allimageStorage.forEach(animalPic => animalPic.renderWithJQueryAndMustache());
-  });
+$('#sort-button').on('click', function(){
+  $('body > section').empty();
   
-  $('button:nth-of-type(2)').on('click', () => {
-    $('body > table tr:nth-child(n+2)').empty();
-    ImgStorage.allimageStorage2.forEach(animalPic2 => animalPic2.renderWithJQueryAndMustache());
+  ImgStorage.allimageStorage.sort(function(l, r) {
+    l = l.horns
+    r = r.horns
+
+    if (l < r) {
+        return 1
+    } else if (l > r) {
+        return -1
+    } else {
+      return 0
+    }
+  })
+  console.log("🚀 ~ file: app.js ~ line 90 ~ ImgStorage.allimageStorage.sort ~  ImgStorage.allimageStorage",  ImgStorage.allimageStorage)
+
+
+  ImgStorage.allimageStorage.forEach(imgStorage => imgStorage.renderWithJQueryAndMustache());
+});
+
+
+
+// Intializes Images to the page
+  $('#lab-02').on('click', function() {
+    $('select').empty();
+    $('body > section').empty();
+    ImgStorage.allimageStorage = [];
+    $.ajax('data/page-1.json').then(objectFile); 
+  })
+
+
+// Intializes Images to the page
+  $('#lab-03').on('click', function() {
+    $('select').empty();
+    $('body > section').empty();
+    ImgStorage.allimageStorage = [];
+
+    $.ajax('data/page-2.json').then(objectFile); 
+
+
+  })
+
+
+
+
+    
+    // ImgStorage.allimageStorage.forEach(animalPic => animalPic.renderWithJQueryAndMustache());
+  // });
   
-  });
+  // $('button:nth-of-type(2)').on('click', () => {
+  //   $('body > table tr:nth-child(n+2)').empty();
+  //   ImgStorage.allimageStorage2.forEach(animalPic2 => animalPic2.renderWithJQueryAndMustache());
+  
+  // });
 
 
 
